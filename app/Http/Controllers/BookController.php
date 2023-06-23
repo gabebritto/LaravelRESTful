@@ -29,7 +29,7 @@ class BookController extends Controller
      */
     public function store(BookRequest $request): JsonResponse
     {
-        return response()->json(new BookResource(Book::create($request->validated())), 201);
+        return response()->json(['message' => 'Book created successfully', 'data' => new BookResource(Book::create($request->validated()))], 201);
     }
 
     /*
@@ -50,22 +50,24 @@ class BookController extends Controller
      * @param BookRequest $request
      * @param Book $book
      *
-     * @return JsonResource
+     * @return JsonResponse
      */
-    public function update(BookRequest $request, Book $book): JsonResource
+    public function update(BookRequest $request, Book $book): JsonResponse
     {
         $book->update($request->validated());
 
-        return new BookResource($book);
+        return response()->json(['message' => 'Book updated successfully', 'data' => new BookResource($book)]);
     }
 
     /*
      * Deletes the referenced book
+     *
+     * @returns JsonResponse
      */
-    public function destroy(Book $book)
+    public function destroy(Book $book): JsonResponse
     {
         $book->delete();
 
-        return response()->json(['message' => 'Book deleted.']);
+        return response()->json(['message' => 'Book deleted successfully.']);
     }
 }
