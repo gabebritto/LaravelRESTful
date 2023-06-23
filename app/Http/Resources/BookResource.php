@@ -4,8 +4,23 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Annotations as OA;
 
-/** @mixin \App\Models\Book */
+/**
+ * @OA\Schema(
+ *     title="BookResource",
+ *     description="Book resource",
+ *     @OA\Xml(
+ *         name="BookResource"
+ *     ),
+ *   @OA\Property(property="data", type="array",
+ *      @OA\Items(ref="#/components/schemas/Book"))
+ *   ),
+ * )
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return array
+ */
 class BookResource extends JsonResource
 {
     public function toArray(Request $request)
