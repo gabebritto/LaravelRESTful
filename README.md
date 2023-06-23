@@ -53,4 +53,8 @@ To authenticate with the API, follow these steps:
 
 Make sure to replace your-email@example.com and your-password with your actual email and password for authentication.
 
+### Testing
+To run automated tests in project use:
+
+ - php artisan test
 
