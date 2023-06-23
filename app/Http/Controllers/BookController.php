@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookController extends Controller
 {
+    private BookService $bookService;
+
+    public function __construct (BookService $bookService)
+    {
+        $this->bookService = $bookService;
+    }
+
     /*
      * Returns the all books in JsonResource Collection
      *
@@ -17,7 +25,7 @@ class BookController extends Controller
      */
     public function index(): JsonResource
     {
-        return BookResource::collection(Book::all());
+        return BookResource::collection($this->bookService->getAll());
     }
 
     /*
@@ -29,7 +37,10 @@ class BookController extends Controller
      */
     public function store(BookRequest $request): JsonResponse
     {
-        return response()->json(['message' => 'Book created successfully', 'data' => new BookResource(Book::create($request->validated()))], 201);
+        return response()->json([
+            'message' => 'Book created successfully',
+            'data' => new BookResource($this->bookService->store($request->validated()))
+        ], 201);
     }
 
     /*
@@ -54,9 +65,10 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, Book $book): JsonResponse
     {
-        $book->update($request->validated());
-
-        return response()->json(['message' => 'Book updated successfully', 'data' => new BookResource($book)]);
+        return response()->json([
+            'message' => 'Book updated successfully',
+            'data' => new BookResource($this->bookService->update($request->validated(), $book))
+        ]);
     }
 
     /*
@@ -66,7 +78,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book): JsonResponse
     {
-        $book->delete();
+        $this->bookService->delete($book);
 
         return response()->json(['message' => 'Book deleted successfully.']);
     }
