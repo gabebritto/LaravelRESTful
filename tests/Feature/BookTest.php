@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Book;
+use App\Models\User;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +15,7 @@ class BookTest extends TestCase
 
     public function test_get_all_books()
     {
+        $this->actingAs(User::factory()->create());
         $response = $this->get('/api/books');
         Book::factory(10)->create();
 
@@ -35,6 +37,7 @@ class BookTest extends TestCase
 
     public function test_for_store_book()
     {
+        $this->actingAs(User::factory()->create());
         $faker = Factory::create();
 
         $payload = [
@@ -64,6 +67,7 @@ class BookTest extends TestCase
 
     public function test_for_find_book_by_id()
     {
+        $this->actingAs(User::factory()->create());
         $book = Book::factory()->create();
 
         $this->get('api/books/' . $book->id)
@@ -88,6 +92,7 @@ class BookTest extends TestCase
 
     public function test_for_book_not_found()
     {
+        $this->actingAs(User::factory()->create());
         $response = $this->get('api/books/99999999999');
 
         $response
@@ -102,6 +107,7 @@ class BookTest extends TestCase
 
     public function test_for_update_book()
     {
+        $this->actingAs(User::factory()->create());
         $book = Book::factory()->create();
 
         $payload = [
@@ -128,6 +134,7 @@ class BookTest extends TestCase
 
     public function test_for_delete_book()
     {
+        $this->actingAs(User::factory()->create());
         $book = Book::factory()->create();
 
         $this->json('delete', 'api/books/' . $book->id)
@@ -141,6 +148,7 @@ class BookTest extends TestCase
 
     public function test_for_store_book_required_fields()
     {
+        $this->actingAs(User::factory()->create());
         $this->json('post', '/api/books')
             ->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -152,6 +160,7 @@ class BookTest extends TestCase
 
     public function test_for_update_book_required_fields()
     {
+        $this->actingAs(User::factory()->create());
         $book = Book::factory()->create();
 
         $this->json('put', 'api/books/' . $book->id)
@@ -165,6 +174,7 @@ class BookTest extends TestCase
 
     public function test_for_update_book_not_found()
     {
+        $this->actingAs(User::factory()->create());
         $this->json('put', 'api/books/' . 999999)
             ->assertStatus(404)
             ->assertJsonStructure([
