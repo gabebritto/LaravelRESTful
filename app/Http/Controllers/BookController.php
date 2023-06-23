@@ -21,11 +21,11 @@ class BookController extends Controller
     /*
      * Returns the all books in JsonResource Collection
      *
-     * @return JsonResource
+     * @return JsonResponse
      */
-    public function index(): JsonResource
+    public function index(): JsonResponse
     {
-        return BookResource::collection($this->bookService->getAll());
+        return response()->json(['data' => BookResource::collection($this->bookService->getAll())]);
     }
 
     /*
@@ -33,7 +33,7 @@ class BookController extends Controller
      *
      * @param BookRequest request
      *
-     * @return JsonReponse
+     * @return JsonResponse
      */
     public function store(BookRequest $request): JsonResponse
     {
@@ -48,11 +48,11 @@ class BookController extends Controller
      *
      * @param Book book
      *
-     * @return JsonResource
+     * @return JsonResponse
      */
-    public function show(Book $book): JsonResource
+    public function show(Book $book): JsonResponse
     {
-        return new BookResource($book);
+        return response()->json(['data' => new BookResource($book)]);
     }
 
     /*
