@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(\App\Http\Controllers\BookController::class)->group(function () {
+Route::middleware('auth:api')->get('/unauthenticated', function (Request $request) {});
+
+Route::controller(\App\Http\Controllers\AuthController::class)->middleware('guest')->group(function () {
+   Route::post('/login', 'login');
+   Route::delete('/logout', 'logout');
+});
+
+Route::controller(\App\Http\Controllers\BookController::class)->middleware('auth:api')->group(function () {
     Route::get('/books', 'index');
     Route::get('/books/{book}', 'show');
     Route::post('/books', 'store');
