@@ -6,6 +6,8 @@ After the project is up and running you can enter in this url to see the API doc
 
 http://localhost/api/documentation
 
+:warning: To perform the api calls run the project configuration before.
+
 ### Project Structure
 The project structure follows Laravel's default structure with some additions and modifications specific to this API:
 
